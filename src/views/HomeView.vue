@@ -4,13 +4,22 @@ import ButtonFilter from '../components/ButtonFilter.vue';
 import FormAddProduct from '../components/FormAddProduct.vue';
 import ProductList from '../components/ProductList.vue';
 
-const products = ref([])
+//state
+const parseStorsge = JSON.parse(localStorage.getItem('products')) || []
+const products = ref(parseStorsge)
+
+//methods
+const saveProductInLS = () => localStorage.setItem('products', JSON.stringify(products.value))
 
 const getProduct = (value) => {
   products.value.push({id: products.value.length, name: value.name, desc: value.desc, link: value.link, price: value.price})
+  saveProductInLS()
 }
 
-const deleteProduct = (id) => products.value = products.value.filter(x => x.id !== id)
+const deleteProduct = (id) => {
+  products.value = products.value.filter(x => x.id !== id)
+  saveProductInLS()
+}
 </script>
 
 <template>

@@ -10,7 +10,7 @@ defineEmits(['onDeleteProduct'])
 
 <template>
     <div class="card-block">
-        <img :src="link" alt="product" class="img">
+        <img :src="product.link" alt="product" class="img">
         <div class="card-block__container">
             <h3 class="title__card">{{ product.name }}</h3>
             <p class="desc__card">{{ product.desc }}</p>
