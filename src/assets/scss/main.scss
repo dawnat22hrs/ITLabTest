@@ -1,0 +1,11 @@
+@import './variables.scss';
+@import './fonts.scss';
+
+*{
+    background-color: $bgc-w;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.container {
+    padding: 32px
+}
