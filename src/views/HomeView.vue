@@ -2,11 +2,22 @@
 import { ref } from 'vue';
 import ButtonFilter from '../components/ButtonFilter.vue';
 import FormAddProduct from '../components/FormAddProduct.vue';
+import CardProduct from '../components/CardProduct.vue';
 import ProductList from '../components/ProductList.vue';
+import { computed } from '@vue/reactivity';
+import { toNumber } from '@vue/shared';
 
 //state
 const parseStorsge = JSON.parse(localStorage.getItem('products')) || []
 const products = ref(parseStorsge)
+const productsSorted = ref([])
+const defButton = ref('По умолчанию')
+const filterCategories = ref([
+  {name: 'По умолчанию', val: 1},
+  {name: 'От min цены', val: 2},
+  {name: 'От max цены', val: 3},
+  {name: 'По названию', val: 4},
+])
 
 //methods
 const saveProductInLS = () => localStorage.setItem('products', JSON.stringify(products.value))
@@ -20,17 +31,57 @@ const deleteProduct = (id) => {
   products.value = products.value.filter(x => x.id !== id)
   saveProductInLS()
 }
+
+const filteredCategories = ()=> {
+  if(productsSorted.value.length){
+    return productsSorted.value
+  }
+}
+
+const filterCategoriesSelect = (name) => {
+  defButton.value = name
+  productsSorted.value = []
+  if(name == 'По названию'){
+    productsSorted.value.push(products.value.sort(function(a,b){
+      if(a['name']<b['name']) return -1
+    }))
+    filteredCategories()
+    console.log(productsSorted.value)
+  } else if(name == 'От min цены'){
+    console.log(name)
+    productsSorted.value.push(products.value.sort(function(a,b){
+      if(Number(a['price'])<Number(b['price'])) return -1
+    }))
+    filteredCategories()
+    console.log(productsSorted.value)
+  }else if(name == 'От max цены'){
+    console.log(name)
+    productsSorted.value.push(products.value.sort(function(a,b){
+      if(Number(a['price'])>Number(b['price'])) return -1
+    }))
+    filteredCategories()
+    console.log(productsSorted.value)
+  } else {
+    console.log(name)
+    productsSorted.value.push(products.value.sort(function(a,b){
+      if(Number(a['id'])<Number(b['id'])) return -1
+    }))
+  }
+}
 </script>
 
 <template>
   <div class="container">
     <header class="header">
       <h2 class="title">Добавление товара</h2>
-      <ButtonFilter/>
+      <ButtonFilter 
+        :filterCategories="filterCategories"
+        @select="filterCategoriesSelect"
+      >{{ defButton }}</ButtonFilter>
     </header>
     <main class="main">
       <FormAddProduct @on-get-product="getProduct"/>
-      <ProductList 
+      <ProductList
         :products="products" 
         @on-delete-product="deleteProduct"
       />
@@ -59,5 +110,13 @@ const deleteProduct = (id) => {
 
 .main {
   display: flex;
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    position: relative;
+    left: 348px;
+  }
 }
 </style>
