@@ -1,7 +1,7 @@
 <script setup>
 import DeleteIcon from './icons/DeleteIcon.vue';
 
-defineProps({
+const props = defineProps({
     product: Object
 })
 
@@ -10,11 +10,11 @@ defineEmits(['onDeleteProduct'])
 
 <template>
     <div class="card-block">
-        <img :src="link" alt="product" class="img">
+        <img :src="product.link" alt="product" class="img">
         <div class="card-block__container">
             <h3 class="title__card">{{ product.name }}</h3>
             <p class="desc__card">{{ product.desc }}</p>
-            <p class="price__card">{{ product.price }} руб.</p>
+            <p class="price__card">{{ Number(product.price).toLocaleString() }} руб.</p>
         </div>
         <div 
             class="btn-del" 
@@ -63,6 +63,7 @@ defineEmits(['onDeleteProduct'])
         box-sizing: border-box;
         width: 100%;
         height: 47.285%;
+        border-radius: 4px 4px 0 0;
     }
 
     .card-block__container {
@@ -108,5 +109,12 @@ defineEmits(['onDeleteProduct'])
     visibility: visible;
     z-index: 99;
     opacity: 1;
+}
+
+@media only screen and (max-width: 390px) {
+    .card-block {
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
 }
 </style>
