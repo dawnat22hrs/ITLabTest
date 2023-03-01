@@ -8,7 +8,6 @@ defineProps({
 
 //methods
 const deleteProduct = (id) => emits('onDeleteProduct', id)
-
 </script>
 
 <template>
@@ -27,7 +26,18 @@ const deleteProduct = (id) => emits('onDeleteProduct', id)
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    position: relative;
+    position:relative;
     left: 348px;
+}
+
+@media only screen and (max-width: 390px) {
+    .list {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 16px;
+        position: relative;
+        left: 0;
+        top: 464px;
+    }
 }
 </style>

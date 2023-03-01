@@ -1,5 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
+
 
 const product = ref({
     name: '',
@@ -8,6 +11,20 @@ const product = ref({
     price: ''
 })
 
+const rules = {
+    name: {required},
+    link: {required},
+    price:{required}
+}
+
+/*const rules = computed(() => ({
+    product: {
+        required: required
+    }
+}))*/
+
+const v = useVuelidate(rules, {product} /*product.value*/) 
+console.log(v)
 defineEmits(['onGetProduct'])
 </script>
 
@@ -17,7 +34,7 @@ defineEmits(['onGetProduct'])
             <div class="inputs__block">
             <div class="name-product product__block">
                 <label class="product__label">Наименование товара</label>
-                <input class="input" type="text" placeholder="Введите наименование товара" v-model="product.name"/>
+                <input class="input" type="text" placeholder="Введите наименование товара" v-model="product.name" />
             </div>
             <div class="desc-product product__block">
                 <label class="product__label">Описание товара</label>
@@ -32,7 +49,7 @@ defineEmits(['onGetProduct'])
                 <input class="input" type="text" placeholder="Введите цену" v-model="product.price"/>
             </div>
         </div>
-        <button class="btn" @click="$emit('onGetProduct', product), product={}">Добавить товар</button>
+        <button class="btn" @click="$emit('onGetProduct', product), product={} ">Добавить товар</button>
         </div>
     </div>
 </template>
@@ -44,7 +61,6 @@ defineEmits(['onGetProduct'])
     background: #FFFEFB;
     box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.04), 0px 6px 10px rgba(0, 0, 0, 0.02);
     border-radius: 4px;
-    margin-right: 16px;
     position: fixed;
 
     .container__add-prod {
@@ -114,9 +130,7 @@ defineEmits(['onGetProduct'])
             }
         }
     }
-
     
-
     .btn {
         margin-top: 24px;
         width: 284px;
@@ -131,6 +145,13 @@ defineEmits(['onGetProduct'])
         text-align: center;
         letter-spacing: -0.02em;
         color: #B4B4B4;
+    }
+}
+
+@media only screen and (max-width: 390px) {
+    .block-add-prod {
+        position: absolute;
+        
     }
 }
 </style>

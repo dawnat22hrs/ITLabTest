@@ -21,7 +21,8 @@ const selectFilterCategory = (name) => {
         <button 
             class="btn" 
             @click="areFilterCategoriesVisible = !areFilterCategoriesVisible"
-        ><slot/></button>
+        ><slot/><div class="triangle-down">
+        </div></button>
         <ul v-if="areFilterCategoriesVisible">
             <li 
                 v-for="filterCategory in filterCategories"
@@ -52,14 +53,26 @@ const selectFilterCategory = (name) => {
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 0;
+
+        .triangle-down {
+            margin-left: 5px;
+            margin-top: 3px;
+            width: 0;
+	        height: 0;
+	        border-left: 5px solid transparent;
+	        border-right: 5px solid transparent;
+	        border-top: 5px solid ;
+        }
     }
 
     ul {
-        position: relative;
+        position:relative;
         width: 121.49px;
         top: 0px;
         background: #FFFEFB;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);            border-radius: 4px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);            
+        border-radius: 4px;
         border: none;
         font-family: 'Source Sans Pro';
         font-style: normal;
@@ -68,7 +81,6 @@ const selectFilterCategory = (name) => {
         line-height: 15px;
         color: #B4B4B4;
         cursor: pointer;
-        //display: none;
 
         li {
             width: 100%;
@@ -78,7 +90,7 @@ const selectFilterCategory = (name) => {
             align-items: center;
             justify-content: center;
         }
-        }
+    }
 }
 
 </style>

@@ -2,15 +2,14 @@
 import { ref } from 'vue';
 import ButtonFilter from '../components/ButtonFilter.vue';
 import FormAddProduct from '../components/FormAddProduct.vue';
-import CardProduct from '../components/CardProduct.vue';
 import ProductList from '../components/ProductList.vue';
-import { computed } from '@vue/reactivity';
-import { toNumber } from '@vue/shared';
+import vAutoAnimate from '@formkit/auto-animate'
 
 //state
 const parseStorsge = JSON.parse(localStorage.getItem('products')) || []
 const products = ref(parseStorsge)
 const productsSorted = ref([])
+const isLoading = ref(false)
 const defButton = ref('По умолчанию')
 const filterCategories = ref([
   {name: 'По умолчанию', val: 1},
@@ -23,8 +22,10 @@ const filterCategories = ref([
 const saveProductInLS = () => localStorage.setItem('products', JSON.stringify(products.value))
 
 const getProduct = (value) => {
+  isLoading.value = true
   products.value.push({id: products.value.length, name: value.name, desc: value.desc, link: value.link, price: value.price})
   saveProductInLS()
+  isLoading.value = false
 }
 
 const deleteProduct = (id) => {
@@ -46,23 +47,17 @@ const filterCategoriesSelect = (name) => {
       if(a['name']<b['name']) return -1
     }))
     filteredCategories()
-    console.log(productsSorted.value)
   } else if(name == 'От min цены'){
-    console.log(name)
     productsSorted.value.push(products.value.sort(function(a,b){
       if(Number(a['price'])<Number(b['price'])) return -1
     }))
     filteredCategories()
-    console.log(productsSorted.value)
   }else if(name == 'От max цены'){
-    console.log(name)
     productsSorted.value.push(products.value.sort(function(a,b){
       if(Number(a['price'])>Number(b['price'])) return -1
     }))
     filteredCategories()
-    console.log(productsSorted.value)
   } else {
-    console.log(name)
     productsSorted.value.push(products.value.sort(function(a,b){
       if(Number(a['id'])<Number(b['id'])) return -1
     }))
@@ -74,14 +69,17 @@ const filterCategoriesSelect = (name) => {
   <div class="container">
     <header class="header">
       <h2 class="title">Добавление товара</h2>
-      <ButtonFilter 
+      <ButtonFilter  v-auto-animate
         :filterCategories="filterCategories"
         @select="filterCategoriesSelect"
       >{{ defButton }}</ButtonFilter>
     </header>
     <main class="main">
       <FormAddProduct @on-get-product="getProduct"/>
-      <ProductList
+      <div class="loading" v-if="isLoading">Loading...</div>
+      <ProductList 
+        v-else
+        v-auto-animate
         :products="products" 
         @on-delete-product="deleteProduct"
       />
@@ -110,13 +108,10 @@ const filterCategoriesSelect = (name) => {
 
 .main {
   display: flex;
+  
 
-  .list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    position: relative;
-    left: 348px;
+  .loading {
+    margin: 20vh 60vw;
   }
 }
 </style>

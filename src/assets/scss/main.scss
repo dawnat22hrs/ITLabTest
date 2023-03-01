@@ -7,5 +7,13 @@
 }
 
 .container {
-    padding: 32px
+    width: 1336px;
+    margin: 32px;
+}
+
+@media only screen and (max-width: 390px) {
+    .container {
+        width: 360px;
+        margin: 15px;
+    }
 }
